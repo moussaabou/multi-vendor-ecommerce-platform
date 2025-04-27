@@ -1,7 +1,8 @@
-from django.urls import path, re_path
-from ecommerce.views import FrontendAppView
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    # إضافة API Endpoints هنا
-    re_path(r'^.*$', FrontendAppView.as_view()),  # لتوجيه جميع الطلبات إلى React
+    path('admin/', admin.site.urls),
+    path('', include('ecommerce.urls')),  # هذا ضروري لربط api/products/
 ]
+

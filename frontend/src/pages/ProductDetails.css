@@ -1,0 +1,107 @@
+/* src/components/ProductDetails.css */
+
+.product-details-page {
+    padding: 20px;
+    direction: rtl;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .back-btn {
+    background-color: #4B0082;
+    color: white;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  .product-detail-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .product-images {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .product-images img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    object-fit: cover;
+    max-height: 300px;
+  }
+  
+  .product-info {
+    flex: 2;
+  }
+  
+  .product-info h2 {
+    margin-top: 0;
+    color: #4B0082;
+  }
+  
+  .price {
+    color: #009688;
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+  
+  .error {
+    color: red;
+  }
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .edit-btn, .delete-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .edit-btn {
+    background-color: #007bff;
+    color: rgb(104, 31, 31);
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+    color: rgb(168, 33, 33);
+  }
+  .product-images {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px 0;
+  }
+  
+  .product-image-slide img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .single-product-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+  

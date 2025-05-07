@@ -13,6 +13,9 @@ from rest_framework.decorators import (
     parser_classes,  
 )
 from rest_framework.parsers import MultiPartParser
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password  # إذا استخدمت كلمات مرور مشفّرة
+
 
 
 
@@ -40,23 +43,44 @@ def product_list(request):
 
 # تسجيل الدخول القديم (غير معتمد على JWT)
 @csrf_exempt
+@api_view(['POST'])
 def login_view(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
 
+    user = None
+    role = None
+
+    try:
+        admin = Admin.objects.get(email=email)
+        if admin.password == password:  # استبدل بـ check_password إذا كانت مشفّرة
+            user = admin
+            role = 'admin'
+    except Admin.DoesNotExist:
+        pass
+
+    if not user:
         try:
-            admin = Admin.objects.get(email=email, password=password)
-            return JsonResponse({'role': 'admin', 'id': admin.id})
-        except Admin.DoesNotExist:
+            seller = Seller.objects.get(email=email)
+            if seller.password == password:
+                user = seller
+                role = 'seller'
+        except Seller.DoesNotExist:
             pass
 
-        try:
-            seller = Seller.objects.get(email=email, password=password)
-            return JsonResponse({'role': 'seller', 'id': seller.id})
-        except Seller.DoesNotExist:
-            return JsonResponse({'error': 'Invalid credentials'}, status=400)
+    if not user:
+        return JsonResponse({'error': 'بيانات الدخول غير صحيحة'}, status=400)
+
+    # إنشاء JWT
+    refresh = RefreshToken.for_user(user)
+
+    return JsonResponse({
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+        'role': role,
+        'id': user.id
+    })
 
 # تسجيل بائع جديد
 @csrf_exempt
@@ -94,16 +118,23 @@ def register_seller(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 # عرض منتجات بائع معين
-@csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from .models import Product
+
+@csrf_exempt  # تعطيل CSRF لهذه الدالة
 def seller_products(request, seller_id):
+    # جلب المنتجات الخاصة بالبائع باستخدام seller_id
     products = Product.objects.filter(seller_id=seller_id)
+
+    # إعداد البيانات لتنسيق الـ JSON
     data = [
         {
             'id': p.id,
             'name': p.name,
             'description': p.description,
             'category': p.category,
-            'price': str(p.price),
+            'price': str(p.price),  # تحويل السعر إلى string لتجنب أي مشاكل
             'images': [
                 p.image1.url if p.image1 else None,
                 p.image2.url if p.image2 else None,
@@ -112,6 +143,7 @@ def seller_products(request, seller_id):
         }
         for p in products
     ]
+
     return JsonResponse(data, safe=False)
 
 # إضافة منتج جديد
@@ -274,3 +306,52 @@ def delete_product_image(request, product_id, image_number):
     except Product.DoesNotExist:
         return JsonResponse({'error': 'المنتج غير موجود'}, status=404)
 
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import Seller, Product
+
+def get_seller_products(request, seller_id):
+    # جلب بيانات البائع باستخدام seller_id
+    seller = get_object_or_404(Seller, id=seller_id)
+
+    # جلب جميع المنتجات الخاصة بالبائع
+    products = Product.objects.filter(seller=seller)
+
+    # تنسيق البيانات بشكل مناسب للـ JSON
+    product_data = []
+    for product in products:
+        images = []
+        if product.image1:
+            images.append(product.image1.url)
+        if product.image2:
+            images.append(product.image2.url)
+        if product.image3:
+            images.append(product.image3.url)
+
+        product_data.append({
+            'id': product.id,
+            'name': product.name,
+            'price': float(product.price),  # لتحويل Decimal إلى float
+            'description': product.description,
+            'images': images
+        })
+
+    # تنسيق بيانات البائع
+    seller_data = {
+        'name': seller.name,
+        'surname': seller.surname,
+        'email': seller.email,
+        'phone_number': seller.phone_number,
+        'address': seller.address,
+        'birth_date': seller.birth_date.strftime('%Y-%m-%d'),
+        'profile_picture': seller.profile_picture.url if seller.profile_picture else None
+    }
+
+    # دمج بيانات البائع والمنتجات في استجابة واحدة
+    response_data = {
+        'seller_info': seller_data,
+        'products': product_data
+    }
+
+    return JsonResponse(response_data)

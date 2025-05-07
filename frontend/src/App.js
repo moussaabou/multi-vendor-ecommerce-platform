@@ -10,23 +10,33 @@ import AddProductPage from './pages/AddProductPage';
 import AllSellersPage from './pages/AllSellersPage';
 import ProductDetails from './pages/ProductDetails';
 import EditProduct from './pages/EditProduct';
+import SellerProductsPage from './pages/SellerProductsPage'; // أعلى الملف
+
 
 function App() {
   return (
     <Router>
       <Navbar />
       <Routes>
+
+        {/* -------------------- صفحات عامة (زائر) -------------------- */}
         <Route path="/" element={<ProductList />} />
-        <Route path="/all-sellers" element={<AllSellersPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/seller" element={<SellerPage />} />
         <Route path="/register-seller" element={<RegisterSellerPage />} />
-        <Route path="/add-product" element={<AddProductPage />} />
+        <Route path="/all-sellers" element={<AllSellersPage />} />
         <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/edit-product/:id" element={<EditProduct />} /> {/* ✅ جديد */}
+        <Route path="/seller-products/:sellerId" element={<SellerProductsPage />} />
+
+        {/* -------------------- صفحات البائع -------------------- */}
+        <Route path="/seller" element={<SellerPage />} />
+        <Route path="/add-product" element={<AddProductPage />} />
+        <Route path="/edit-product/:id" element={<EditProduct />} />
+
+        {/* -------------------- صفحات الأدمن -------------------- */}
+        <Route path="/admin" element={<AdminPage />} />
+
       </Routes>
-    </Router>
+      </Router>
   );
 }
 

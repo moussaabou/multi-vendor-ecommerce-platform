@@ -18,7 +18,7 @@ function AllSellersPage() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Error fetching sellers:', err);
+        console.error('حدث خطأ أثناء جلب بيانات البائعين:', err);
         setLoading(false);
       });
   }, []);
@@ -41,7 +41,7 @@ function AllSellersPage() {
   return (
     <div className="all-sellers-page">
       <div className="container">
-        <h2>قائمة جميع البائعين</h2>
+        <h2>📋 قائمة جميع البائعين</h2>
 
         <input
           type="text"
@@ -52,11 +52,12 @@ function AllSellersPage() {
         />
 
         {loading ? (
-          <p>جاري التحميل...</p>
+          <p>⏳ جاري التحميل...</p>
         ) : (
           <div className="sellers-list">
+            <p>إجمالي البائعين: {filteredSellers.length}</p>
             {filteredSellers.length === 0 ? (
-              <p>لا يوجد نتائج مطابقة.</p>
+              <p>❌ لا يوجد نتائج مطابقة.</p>
             ) : (
               <ul>
                 {filteredSellers.map((seller) => (
@@ -67,9 +68,8 @@ function AllSellersPage() {
                     <p>🏠 {seller.address}</p>
                     <p>🎂 {seller.birth_date}</p>
 
-                    {/* زر عرض المنتجات */}
                     <button onClick={() => viewProducts(seller.id)} className="view-btn">
-                      عرض المنتجات
+                      👀 عرض المنتجات
                     </button>
                   </li>
                 ))}

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import './AddProductPage.css';
 
 function AddProductPage() {
@@ -77,12 +76,17 @@ function AddProductPage() {
 
   return (
     <div className="App">
-      <Navbar />
       <div className="form-container">
         <h2>إضافة منتج جديد</h2>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="اسم المنتج" value={name} onChange={(e) => setName(e.target.value)} required />
-          <input type="text" placeholder="الفئة" value={category} onChange={(e) => setCategory(e.target.value)} required />
+          <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+                  <option value="">اختر نوع المنتج</option>
+                  <option value="هاتف">هاتف</option>
+                  <option value="إلكترونيات">إلكترونيات</option>
+                  <option value="غيارات سيارات">غيارات سيارات</option>
+                  <option value="حاسوب">حاسوب</option>
+          </select>
           <input type="number" placeholder="السعر" value={price} onChange={(e) => setPrice(e.target.value)} required />
           <textarea placeholder="الوصف" value={description} onChange={(e) => setDescription(e.target.value)} required />
 

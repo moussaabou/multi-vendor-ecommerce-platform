@@ -16,7 +16,8 @@ from .views import (
     get_all_sellers,
     delete_seller,
     seller_profile,
-    update_product
+    update_product,
+    update_seller_profile
 )
 
 urlpatterns = [
@@ -32,6 +33,7 @@ path('api/register-seller/', register_seller, name='register-seller'),
 path('api/seller-products/<int:seller_id>/', seller_products, name='seller-products'),
 path('api/seller-profile/<int:seller_id>/', seller_profile, name='seller-profile'),
 path('api/get-seller-products/<int:seller_id>/', get_seller_products, name='get-seller-products'),
+path('api/seller-profile/<int:seller_id>/', update_seller_profile, name='update_seller_profile'),
 
 # ==== الإدارة (أدمن) ====
 path('api/sellers/', get_all_sellers, name='get-all-sellers'),

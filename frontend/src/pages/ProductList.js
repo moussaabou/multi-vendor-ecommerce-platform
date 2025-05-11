@@ -1,9 +1,12 @@
+// src/pages/ProductList.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ProductList.css'; // لتنسيق الصفحة
+import SearchComponent from '../components/SearchComponent'; // تأكد من المسار الصحيح
+import './ProductList.css';
 
 function ProductList() {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -24,20 +27,27 @@ function ProductList() {
   }, []);
 
   const handleProductClick = (id) => {
-    navigate(`/product/${id}`); // عند الضغط نذهب لصفحة تفاصيل المنتج
+    navigate(`/product/${id}`);
   };
+
+  const filteredProducts = products.filter((product) =>
+    product.name?.toLowerCase().includes(searchTerm)
+  );
 
   return (
     <div className="App">
       <h1>قائمة المنتجات</h1>
 
+      {/* ✅ مكون البحث */}
+      <SearchComponent searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
       {loading ? (
         <p>جاري التحميل...</p>
-      ) : products.length === 0 ? (
-        <p>لا توجد منتجات متاحة حالياً</p>
+      ) : filteredProducts.length === 0 ? (
+        <p>❌ لا توجد منتجات مطابقة.</p>
       ) : (
         <ul className="product-list">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <li 
               key={product.id} 
               className="product-item" 

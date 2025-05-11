@@ -1,4 +1,13 @@
+XAMPP -----------------------
+
+---------------------- Git Bush
+
 cd "C:\Users\msi\Desktop\myproject"
 source venv/Scripts/activate
 cd backend
 python manage.py runserver
+
+---------------------- VS Code
+
+cd frontend
+npm start

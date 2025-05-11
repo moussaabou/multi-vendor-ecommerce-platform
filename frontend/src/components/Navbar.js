@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <Link className="nav-logo" to="/">منتجاتي</Link>
+        <Link className="nav-logo" to="/">المنتجات</Link>
         <Link className="nav-link" to="/all-sellers">جميع البائعين</Link>
       </div>
       <div className="navbar-right">
@@ -47,7 +47,13 @@ const Navbar = () => {
 
         {isAuthenticated && userType === 'seller' && (
           <>
-            <img src={profilePic} alt="صورة البائع" className="seller-avatar" />
+              <img 
+                    src={profilePic} 
+                    alt="صورة البائع" 
+                    className="seller-avatar"
+                    onClick={() => navigate(`/seller-profile-page/${userId}`)}
+                    style={{ cursor: 'pointer' }}
+              />
             <Link className="nav-link" to="/seller">لوحة البائع</Link>
             <Link className="nav-link" to="/add-product">إضافة منتج</Link>
             <button className="logout-btn" onClick={handleLogout}>تسجيل الخروج</button>

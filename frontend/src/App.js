@@ -11,6 +11,7 @@ import AllSellersPage from './pages/AllSellersPage';
 import ProductDetails from './pages/ProductDetails';
 import EditProduct from './pages/EditProduct';
 import SellerProductsPage from './pages/SellerProductsPage'; // أعلى الملف
+import SellerProfilePage from './pages/SellerProfilePage';
 
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
         <Route path="/seller" element={<SellerPage />} />
         <Route path="/add-product" element={<AddProductPage />} />
         <Route path="/edit-product/:id" element={<EditProduct />} />
+        <Route path="/seller-profile-page/:id" element={<SellerProfilePage />} />
+
 
         {/* -------------------- صفحات الأدمن -------------------- */}
         <Route path="/admin" element={<AdminPage />} />

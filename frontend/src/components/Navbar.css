@@ -4,58 +4,61 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4B0082; /* لون بنفسجي غامق */
-  padding: 12px 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background-color: #4B0082; /* بنفسجي غامق */
+  padding: 14px 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   direction: rtl;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .nav-logo {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
 }
 
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .nav-link {
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
   font-size: 1rem;
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
 }
 
 .logout-btn {
-  background-color: #FF4C4C;
-  color: #fff;
+  background-color: #e74c3c;
+  color: #ffffff;
   border: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   font-size: 1rem;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .logout-btn:hover {
-  background-color: #cc0000;
-}
-
-/* تنسيق خاص بصورة البائع */
-.seller-profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  background-color: #c0392b;
+  transform: scale(1.05);
 }
 
 .seller-avatar {
@@ -63,5 +66,11 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
+  border: 2px solid #ffffff;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+.seller-avatar:hover {
+  transform: scale(1.1);
 }

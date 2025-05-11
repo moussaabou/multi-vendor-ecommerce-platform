@@ -88,7 +88,16 @@ function ProductDetails() {
           <p className="price">{product.price} د.ج</p>
           <p><strong>الفئة:</strong> {product.category}</p>
           <p><strong>الوصف:</strong> {product.description}</p>
-          <p><strong>البائع:</strong> {product.seller}</p>
+          <p>
+              <strong>البائع:</strong>{' '}
+           <span 
+    className="seller-link" 
+    onClick={() => navigate(`/seller-products/${product.seller_id}`)}
+    style={{ color: '#007bff', cursor: 'pointer', textDecoration: 'underline' }}
+  >
+    {product.seller}
+  </span>
+</p>
 
           {userType === 'seller' && product.seller_id === parseInt(userId) && (
             <div className="actions">

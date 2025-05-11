@@ -1,3 +1,4 @@
+from email.feedparser import FeedParser
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Admin, Seller, Product
@@ -15,6 +16,10 @@ from rest_framework.decorators import (
 from rest_framework.parsers import MultiPartParser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password  # إذا استخدمت كلمات مرور مشفّرة
+from django.utils.dateparse import parse_date
+from django.http import JsonResponse
+import traceback
+from django.shortcuts import get_object_or_404
 
 
 
@@ -118,9 +123,6 @@ def register_seller(request):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 # عرض منتجات بائع معين
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from .models import Product
 
 @csrf_exempt  # تعطيل CSRF لهذه الدالة
 def seller_products(request, seller_id):
@@ -306,11 +308,6 @@ def delete_product_image(request, product_id, image_number):
     except Product.DoesNotExist:
         return JsonResponse({'error': 'المنتج غير موجود'}, status=404)
 
-
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from .models import Seller, Product
-
 def get_seller_products(request, seller_id):
     # جلب بيانات البائع باستخدام seller_id
     seller = get_object_or_404(Seller, id=seller_id)
@@ -355,3 +352,58 @@ def get_seller_products(request, seller_id):
     }
 
     return JsonResponse(response_data)
+
+#------------
+
+@csrf_exempt
+def update_seller_profile(request, seller_id):
+    try:
+        seller = Seller.objects.get(id=seller_id)
+    except Seller.DoesNotExist:
+        return JsonResponse({'error': 'البائع غير موجود'}, status=404)
+
+    try:
+        if request.method == 'GET':
+            return JsonResponse({
+                'name': seller.name,
+                'surname': seller.surname,
+                'phone_number': seller.phone_number,
+                'email': seller.email,
+                'address': seller.address,
+                'birth_date': str(seller.birth_date),
+                'profile_picture': seller.profile_picture.url if seller.profile_picture else None,
+            })
+
+        elif request.method == 'POST':
+            name = request.POST.get('name', seller.name)
+            surname = request.POST.get('surname', seller.surname)
+            phone_number = request.POST.get('phone_number', seller.phone_number)
+            email = request.POST.get('email', seller.email)
+            address = request.POST.get('address', seller.address)
+            birth_date = request.POST.get('birth_date', None)
+            password = request.POST.get('password')
+
+            seller.name = name
+            seller.surname = surname
+            seller.phone_number = phone_number
+            seller.email = email
+            seller.address = address
+
+            if birth_date:
+                seller.birth_date = parse_date(birth_date)
+
+            if 'profile_picture' in request.FILES:
+                seller.profile_picture = request.FILES['profile_picture']
+
+            if password:
+                seller.password = password  # يمكنك تشفيرها مستقبلاً
+
+            seller.save()
+            return JsonResponse({'message': 'تم التحديث بنجاح'})
+
+        else:
+            return JsonResponse({'error': 'الطريقة غير مدعومة'}, status=405)
+
+    except Exception as e:
+        print("خطأ:", traceback.format_exc())  # لطباعته في الكونسول
+        return JsonResponse({'error': 'حدث خطأ في الخادم'}, status=500)

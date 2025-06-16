@@ -1,107 +1,145 @@
-/* src/components/ProductDetails.css */
+:root {
+  --bg-page: #f4f4f4;
+  --bg-card: #ffffff;
+  --text-main: #222222;
+  --highlight: #4B0082;
+  --price-color: #009688;
+  --error-color: red;
+  --btn-bg: #4B0082;
+  --btn-text: #ffffff;
+  --btn-edit-bg: #007bff;
+  --btn-edit-text: #ffffff;
+  --btn-delete-bg: #dc3545;
+  --btn-delete-text: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-page: #181829;
+  --bg-card: #1e1e2f;
+  --text-main: #f0f0f0;
+  --highlight: #a678f5;
+  --price-color: #4dd0e1;
+  --error-color: #ff6b6b;
+  --btn-bg: #6a1b9a;
+  --btn-text: #ffffff;
+  --btn-edit-bg: #3399ff;
+  --btn-edit-text: #fff;
+  --btn-delete-bg: #ff4d4d;
+  --btn-delete-text: #fff;
+  --shadow: rgba(255, 255, 255, 0.05);
+}
 
 .product-details-page {
-    padding: 20px;
-    direction: rtl;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  
-  .back-btn {
-    background-color: #4B0082;
-    color: white;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    cursor: pointer;
-  }
-  
-  .product-detail-card {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-  
-  .product-images {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  .product-images img {
-    width: 100%;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    object-fit: cover;
-    max-height: 300px;
-  }
-  
-  .product-info {
-    flex: 2;
-  }
-  
-  .product-info h2 {
-    margin-top: 0;
-    color: #4B0082;
-  }
-  
-  .price {
-    color: #009688;
-    font-weight: bold;
-    font-size: 1.3rem;
-  }
-  
-  .error {
-    color: red;
-  }
-  .actions {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-  }
-  
-  .edit-btn, .delete-btn {
-    padding: 6px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .edit-btn {
-    background-color: #007bff;
-    color: rgb(104, 31, 31);
-  }
-  
-  .delete-btn {
-    background-color: #dc3545;
-    color: rgb(168, 33, 33);
-  }
-  .product-images {
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    padding: 20px 0;
-  }
-  
-  .product-image-slide img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  .single-product-image {
+  padding: 20px;
+  direction: rtl;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.back-btn {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #5e239d;
+}
+
+.product-detail-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  background-color: var(--bg-card);
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px var(--shadow);
+  transition: background-color 0.3s ease;
+}
+
+.product-images {
   width: 100%;
   max-width: 400px;
+  margin: auto;
+  padding: 20px 0;
+}
+
+.product-images img,
+.product-image-slide img,
+.single-product-image {
+  width: 100%;
   height: auto;
-  border-radius: 10px;
   object-fit: cover;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   margin-bottom: 20px;
 }
 
-  
+.product-info {
+  flex: 2;
+}
+
+.product-info h2 {
+  margin-top: 0;
+  color: var(--highlight);
+  font-size: 1.8rem;
+}
+
+.price {
+  color: var(--price-color);
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin: 10px 0;
+}
+
+.error {
+  color: var(--error-color);
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.edit-btn {
+  background-color: var(--btn-edit-bg);
+  color: var(--btn-edit-text);
+}
+
+.edit-btn:hover {
+  transform: scale(1.03);
+  background-color: #1c75d3;
+}
+
+.delete-btn {
+  background-color: var(--btn-delete-bg);
+  color: var(--btn-delete-text);
+}
+
+.delete-btn:hover {
+  transform: scale(1.03);
+  background-color: #c82333;
+}

@@ -1,45 +1,90 @@
+:root {
+  --bg-body: linear-gradient(to right, #ece9e6, #ffffff);
+  --bg-form: rgba(255, 255, 255, 0.9);
+  --text-color: #333;
+  --input-bg: #ffffff;
+  --input-border: #ccc;
+  --btn-bg: #4CAF50;
+  --btn-hover: #45a049;
+  --shadow-light: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --bg-body: linear-gradient(to right, #1a1a2e, #16213e);
+  --bg-form: rgba(30, 30, 47, 0.9);
+  --text-color: #f0f0f0;
+  --input-bg: #2c2c3e;
+  --input-border: #555;
+  --btn-bg: #388e3c;
+  --btn-hover: #2e7d32;
+  --shadow-light: rgba(0, 0, 0, 0.4);
+}
+
+/* خلفية الصفحة */
+body {
+  background: var(--bg-body);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+  transition: background 0.5s ease;
+}
+
+/* نموذج التسجيل */
 .register-container {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    direction: rtl;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .register-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .register-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .register-container input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-  }
-  
-  .register-container button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .register-container button:hover {
-    background-color: #45a049;
-  }
-  
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 26px 30px;
+  background-color: var(--bg-form);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px var(--shadow-light);
+  direction: rtl;
+  color: var(--text-color);
+  backdrop-filter: blur(6px);
+  transition: background-color 0.5s ease, color 0.3s ease;
+}
+
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 22px;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+.register-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.register-container input {
+  padding: 11px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.register-container input:focus {
+  outline: none;
+  border-color: var(--btn-bg);
+  box-shadow: 0 0 8px var(--btn-bg);
+}
+
+.register-container button {
+  padding: 12px;
+  background-color: var(--btn-bg);
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.register-container button:hover {
+  background-color: var(--btn-hover);
+  transform: scale(1.03);
+}

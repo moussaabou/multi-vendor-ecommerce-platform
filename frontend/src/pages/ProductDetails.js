@@ -88,6 +88,8 @@ function ProductDetails() {
           <p className="price">{product.price} د.ج</p>
           <p><strong>الفئة:</strong> {product.category}</p>
           <p><strong>الوصف:</strong> {product.description}</p>
+          <p><strong>هاتف البائع:</strong> {product.seller_phone}</p>
+          <p><strong>عنوان البائع:</strong> {product.seller_address}</p>
           <p>
               <strong>البائع:</strong>{' '}
            <span 

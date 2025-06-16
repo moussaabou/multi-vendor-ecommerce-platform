@@ -1,43 +1,99 @@
-/* src/pages/AddProductPage.css */
+:root {
+  --bg-color: #ffffff;
+  --form-bg: #f9f9f9;
+  --text-color: #333;
+  --input-border: #ccc;
+  --btn-bg: #28a745;
+  --btn-hover: #218838;
+  --preview-border: #ddd;
+}
+
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --form-bg: #1e1e2f;
+  --text-color: #e0e0e0;
+  --input-border: #444;
+  --btn-bg: #4caf50;
+  --btn-hover: #388e3c;
+  --preview-border: #666;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.add-product-page {
+  padding: 20px;
+  direction: rtl;
+  font-family: 'Arial', sans-serif;
+}
 
 .form-container {
-    max-width: 500px;
-    margin: auto;
-    padding: 30px;
-    background: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    direction: rtl;
-    text-align: right;
-  }
-  
-  .form-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .form-container input,
-  .form-container textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: 'Arial';
-  }
-  
-  .form-container button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-  }
-  
-  .form-container button:hover {
-    background-color: #45a049;
-  }
-  
+  max-width: 550px;
+  margin: auto;
+  padding: 30px;
+  background: var(--form-bg);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  background-color: var(--btn-bg);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--btn-hover);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.image-upload label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-color);
+}
+
+.preview {
+  display: block;
+  margin-top: 10px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--preview-border);
+}

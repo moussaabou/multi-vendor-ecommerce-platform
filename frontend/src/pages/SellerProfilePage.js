@@ -11,9 +11,11 @@ function SellerProfile() {
     address: '',
     birth_date: '',
     profile_picture: '',
+    current_password: '',
   });
-  
+
   const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState('');
@@ -22,13 +24,15 @@ function SellerProfile() {
     fetch(`/api/seller-profile/${sellerId}/`)
       .then(res => res.json())
       .then(data => {
-        setSellerData(data);
-        console.log('بيانات البائع:', data);
+        setSellerData(prev => ({ ...prev, ...data }));
         if (data.profile_picture) {
           setPreview(data.profile_picture);
         }
       })
-      .catch(err => console.error('فشل في تحميل البيانات', err));
+      .catch(err => {
+        console.error('فشل في تحميل البيانات', err);
+        setMessage('حدث خطأ أثناء تحميل البيانات');
+      });
   }, [sellerId]);
 
   const handleChange = (e) => {
@@ -44,12 +48,23 @@ function SellerProfile() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!sellerData.current_password) {
+      setMessage('يرجى إدخال كلمة المرور الحالية');
+      return;
+    }
+
+    if (newPassword && newPassword !== confirmNewPassword) {
+      setMessage('كلمة المرور الجديدة غير متطابقة');
+      return;
+    }
+
     const formData = new FormData();
     Object.keys(sellerData).forEach(key => {
       formData.append(key, sellerData[key]);
     });
+
     if (selectedImage) formData.append('profile_picture', selectedImage);
-    if (newPassword) formData.append('password', newPassword);
+    if (newPassword) formData.append('new_password', newPassword);
 
     fetch(`/api/seller-profile/${sellerId}/`, {
       method: 'POST',
@@ -57,11 +72,15 @@ function SellerProfile() {
     })
       .then(res => res.json())
       .then(data => {
-        setMessage(data.message || 'تم التحديث');
+        if (data.error) {
+          setMessage(data.error);
+        } else {
+          setMessage(data.message || 'تم التحديث بنجاح');
+        }
       })
       .catch(err => {
+        console.error('فشل في التحديث', err);
         setMessage('حدث خطأ أثناء التحديث');
-        console.error(err);
       });
   };
 
@@ -74,13 +93,37 @@ function SellerProfile() {
           <input type="file" onChange={handleImageChange} accept="image/*" />
         </div>
 
-        <input type="text" name="name" value={sellerData.name} onChange={handleChange} placeholder="الاسم" />
-        <input type="text" name="surname" value={sellerData.surname} onChange={handleChange} placeholder="اللقب" />
-        <input type="text" name="phone_number" value={sellerData.phone_number} onChange={handleChange} placeholder="رقم الهاتف" />
+        <input type="text" name="name" value={sellerData.name} onChange={handleChange} placeholder="الاسم" required />
+        <input type="text" name="surname" value={sellerData.surname} onChange={handleChange} placeholder="اللقب" required />
+        <input type="text" name="phone_number" value={sellerData.phone_number} onChange={handleChange} placeholder="رقم الهاتف" required />
+        <input type="email" name="email" value={sellerData.email} onChange={handleChange} placeholder="الإيميل" required />
         <input type="text" name="address" value={sellerData.address} onChange={handleChange} placeholder="العنوان" />
         <input type="date" name="birth_date" value={sellerData.birth_date} onChange={handleChange} />
 
-        <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="كلمة مرور جديدة (اختياري)" />
+        <hr />
+
+        <input
+          type="password"
+          name="current_password"
+          value={sellerData.current_password}
+          onChange={handleChange}
+          placeholder="كلمة المرور الحالية (إلزامية)"
+          required
+        />
+
+        <input
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          placeholder="كلمة مرور جديدة (اختياري)"
+        />
+
+        <input
+          type="password"
+          value={confirmNewPassword}
+          onChange={(e) => setConfirmNewPassword(e.target.value)}
+          placeholder="تأكيد كلمة المرور الجديدة"
+        />
 
         <button type="submit">تحديث المعلومات</button>
         {message && <p className="message">{message}</p>}

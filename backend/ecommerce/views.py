@@ -27,24 +27,89 @@ from django.shortcuts import get_object_or_404
 # عرض كل المنتجات
 @api_view(['GET'])
 def product_list(request):
-    products = Product.objects.all()
-    data = [
-        {
-            'id': p.id,
-            'name': p.name,
-            'description': p.description,
-            'category': p.category,
-            'price': str(p.price),
-            'images': [
-                p.image1.url if p.image1 else None,
-                p.image2.url if p.image2 else None,
-                p.image3.url if p.image3 else None,
-            ],
-            'seller': p.seller.name,
-        }
-        for p in products
-    ]
-    return JsonResponse(data, safe=False)
+    try:
+        category = request.GET.get('category', None)
+        min_price = request.GET.get('min_price', None)
+        max_price = request.GET.get('max_price', None)
+        order = request.GET.get('order', 'asc')  # 'asc' or 'desc'
+
+        products = Product.objects.all()
+
+        if category:
+            products = products.filter(category=category)
+        if min_price:
+            products = products.filter(price__gte=min_price)
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if order == 'asc':
+            products = products.order_by('price')
+        else:
+            products = products.order_by('-price')
+
+        data = [
+            {
+                'id': p.id,
+                'name': p.name,
+                'description': p.description,
+                'category': p.category,
+                'price': str(p.price),
+                'images': [
+                    p.image1.url if p.image1 else None,
+                    p.image2.url if p.image2 else None,
+                    p.image3.url if p.image3 else None,
+                ],
+                'seller': p.seller.name,
+            }
+            for p in products
+        ]
+
+        return JsonResponse(data, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+#حسب التصنيف عرض  المنتجات
+@csrf_exempt
+def filtered_products(request):
+    try:
+        category = request.GET.get('category', None)
+        min_price = request.GET.get('min_price', None)
+        max_price = request.GET.get('max_price', None)
+        order = request.GET.get('order', 'asc')  # 'asc' or 'desc'
+
+        products = Product.objects.all()
+
+        if category:
+            products = products.filter(category=category)
+        if min_price:
+            products = products.filter(price__gte=min_price)
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if order == 'asc':
+            products = products.order_by('price')
+        else:
+            products = products.order_by('-price')
+
+        data = [
+            {
+                'id': p.id,
+                'name': p.name,
+                'description': p.description,
+                'category': p.category,
+                'price': str(p.price),
+                'images': [
+                    p.image1.url if p.image1 else None,
+                    p.image2.url if p.image2 else None,
+                    p.image3.url if p.image3 else None,
+                ],
+                'seller': p.seller.name,
+            }
+            for p in products
+        ]
+
+        return JsonResponse(data, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 # تسجيل الدخول القديم (غير معتمد على JWT)
 @csrf_exempt
@@ -59,7 +124,7 @@ def login_view(request):
 
     try:
         admin = Admin.objects.get(email=email)
-        if admin.password == password:  # استبدل بـ check_password إذا كانت مشفّرة
+        if admin.password == password:
             user = admin
             role = 'admin'
     except Admin.DoesNotExist:
@@ -80,12 +145,26 @@ def login_view(request):
     # إنشاء JWT
     refresh = RefreshToken.for_user(user)
 
-    return JsonResponse({
+    response_data = {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
         'role': role,
         'id': user.id
-    })
+    }
+
+    if role == 'seller':
+        # إرجاع كل بيانات البائع
+        response_data.update({
+            'name': user.name,
+            'surname': user.surname,
+            'phone_number': user.phone_number,
+            'email': user.email,
+            'address': user.address,
+            'birth_date': str(user.birth_date),
+            'profile_picture': user.profile_picture.url if user.profile_picture else None
+        })
+
+    return JsonResponse(response_data)
 
 # تسجيل بائع جديد
 @csrf_exempt
@@ -245,6 +324,8 @@ def get_product_detail(request, product_id):
             ],
             'seller': product.seller.name,
             'seller_id': product.seller.id,
+            'seller_phone': product.seller.phone_number,
+            'seller_address': product.seller.address,
         }
         return JsonResponse(data)
     except Product.DoesNotExist:
@@ -354,7 +435,6 @@ def get_seller_products(request, seller_id):
     return JsonResponse(response_data)
 
 #------------
-
 @csrf_exempt
 def update_seller_profile(request, seller_id):
     try:
@@ -375,13 +455,24 @@ def update_seller_profile(request, seller_id):
             })
 
         elif request.method == 'POST':
+            current_password = request.POST.get('current_password')
+
+            if not current_password:
+                return JsonResponse({'error': 'يرجى إدخال كلمة المرور الحالية لتعديل البيانات'}, status=400)
+
+            # تحقق من صحة كلمة المرور
+            if current_password != seller.password:
+                return JsonResponse({'error': 'كلمة المرور الحالية غير صحيحة'}, status=400)
+
+            # تعديل البيانات بعد التحقق
             name = request.POST.get('name', seller.name)
             surname = request.POST.get('surname', seller.surname)
             phone_number = request.POST.get('phone_number', seller.phone_number)
             email = request.POST.get('email', seller.email)
             address = request.POST.get('address', seller.address)
-            birth_date = request.POST.get('birth_date', None)
-            password = request.POST.get('password')
+            birth_date = request.POST.get('birth_date')
+
+            new_password = request.POST.get('new_password')
 
             seller.name = name
             seller.surname = surname
@@ -395,15 +486,15 @@ def update_seller_profile(request, seller_id):
             if 'profile_picture' in request.FILES:
                 seller.profile_picture = request.FILES['profile_picture']
 
-            if password:
-                seller.password = password  # يمكنك تشفيرها مستقبلاً
+            if new_password:
+                seller.password = new_password  # ضع make_password(new_password) إذا كنت تستخدم تشفير
 
             seller.save()
-            return JsonResponse({'message': 'تم التحديث بنجاح'})
+            return JsonResponse({'message': 'تم تحديث المعلومات بنجاح'})
 
         else:
             return JsonResponse({'error': 'الطريقة غير مدعومة'}, status=405)
 
     except Exception as e:
-        print("خطأ:", traceback.format_exc())  # لطباعته في الكونسول
+        print("خطأ:", traceback.format_exc())
         return JsonResponse({'error': 'حدث خطأ في الخادم'}, status=500)

@@ -1,78 +1,109 @@
+:root {
+  --bg-container: #ffffff;
+  --bg-info: #f9f9f9;
+  --bg-card: #ffffff;
+  --text-main: #222222;
+  --text-muted: #666666;
+  --btn-bg: #007bff;
+  --btn-hover: #0056b3;
+  --border-color: #ddd;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --bg-container: #1a1a2e;
+  --bg-info: #222244;
+  --bg-card: #2a2a40;
+  --text-main: #f0f0f0;
+  --text-muted: #aaaaaa;
+  --btn-bg: #3399ff;
+  --btn-hover: #2277cc;
+  --border-color: #444;
+  --shadow: rgba(255, 255, 255, 0.08);
+}
+
 .container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    direction: rtl;
-    text-align: right;
-  }
-  
-  .seller-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .seller-image {
-    margin-right: 20px;
-  }
-  
-  .profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .seller-details {
-    flex-grow: 1;
-  }
-  
-  .seller-details h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .seller-details p {
-    margin: 5px 0;
-  }
-  
-  .product-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .product-card {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  }
-  
-  .product-image {
-    max-width: 150px;
-    height: auto;
-    margin-top: 10px;
-    border-radius: 8px;
-  }
-  /* تنسيق زر عرض التفاصيل */
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  direction: rtl;
+  text-align: right;
+  background-color: var(--bg-container);
+  color: var(--text-main);
+  transition: background-color 0.4s ease, color 0.3s ease;
+}
+
+.seller-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: var(--bg-info);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px var(--shadow);
+}
+
+.seller-image {
+  margin-right: 20px;
+}
+
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.seller-details {
+  flex-grow: 1;
+}
+
+.seller-details h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.seller-details p {
+  margin: 5px 0;
+  color: var(--text-muted);
+}
+
+.product-list {
+  list-style: none;
+  padding: 0;
+}
+
+.product-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.product-image {
+  max-width: 150px;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+/* زر عرض التفاصيل */
 .view-details-btn {
   display: inline-block;
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: var(--btn-bg);
   color: white;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-top: 10px;
   text-align: center;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
 .view-details-btn:hover {
-  background-color: #0056b3;
+  background-color: var(--btn-hover);
 }

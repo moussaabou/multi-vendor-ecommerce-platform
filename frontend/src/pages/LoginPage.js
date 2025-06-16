@@ -6,13 +6,13 @@ function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // حالة التحميل
-  const [error, setError] = useState(''); // لتخزين رسائل الخطأ
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setLoading(true);  // تفعيل حالة التحميل
-    setError(''); // إفراغ رسالة الخطأ عند محاولة تسجيل الدخول جديدة
+    setLoading(true);
+    setError('');
 
     fetch('/api/login/', {
       method: 'POST',
@@ -22,7 +22,7 @@ function LoginPage() {
       body: JSON.stringify({ email, password }),
     })
       .then((res) => {
-        setLoading(false);  // إيقاف حالة التحميل
+        setLoading(false);
         if (!res.ok) throw new Error('فشل تسجيل الدخول');
         return res.json();
       })
@@ -31,15 +31,29 @@ function LoginPage() {
           // تخزين معلومات الدخول
           localStorage.setItem('isAuthenticated', 'true');
           localStorage.setItem('userType', data.role);
-          localStorage.setItem('userId', data.id); // تأكد أن الـ API ترجع id
+          localStorage.setItem('userId', data.id);
 
-          // توجيه حسب نوع المستخدم
+          // إن كان بائعًا، خزّن معلوماته بالكامل
+          if (data.role === 'seller') {
+            localStorage.setItem('sellerData', JSON.stringify({
+              name: data.name,
+              surname: data.surname,
+              phone_number: data.phone_number,
+              email: data.email,
+              address: data.address,
+              birth_date: data.birth_date,
+              profile_picture: data.profile_picture,
+            }));
+          }
+
+          // التوجيه حسب نوع المستخدم
           navigate(data.role === 'admin' ? '/admin' : '/seller');
         } else {
           setError('مستخدم غير معروف');
         }
       })
       .catch((error) => {
+        setLoading(false);
         setError('معلومات الدخول غير صحيحة');
         console.error(error);
       });
@@ -67,7 +81,7 @@ function LoginPage() {
           {loading ? 'جاري تسجيل الدخول...' : 'دخول'}
         </button>
       </form>
-      
+
       {error && <p className="error-message">{error}</p>}
     </div>
   );

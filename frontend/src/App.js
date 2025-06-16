@@ -12,6 +12,8 @@ import ProductDetails from './pages/ProductDetails';
 import EditProduct from './pages/EditProduct';
 import SellerProductsPage from './pages/SellerProductsPage'; // أعلى الملف
 import SellerProfilePage from './pages/SellerProfilePage';
+import ProductFilterPage from './pages/ProductFilterPage';
+
 
 
 function App() {
@@ -22,11 +24,14 @@ function App() {
 
         {/* -------------------- صفحات عامة (زائر) -------------------- */}
         <Route path="/" element={<ProductList />} />
+        <Route path="/ProductList" element={<ProductList />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register-seller" element={<RegisterSellerPage />} />
         <Route path="/all-sellers" element={<AllSellersPage />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/seller-products/:sellerId" element={<SellerProductsPage />} />
+        <Route path="/filter-products" element={<ProductFilterPage />} />
+
 
         {/* -------------------- صفحات البائع -------------------- */}
         <Route path="/seller" element={<SellerPage />} />

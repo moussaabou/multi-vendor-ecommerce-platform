@@ -1,62 +1,159 @@
+:root {
+  --bg-main: #f7f7f7;
+  --bg-card: #ffffff;
+  --text-main: #333333;
+  --text-muted: #666666;
+  --border-color: #bbb;
+  --shadow-inset: rgba(0, 0, 0, 0.1);
+  --shadow-hover: rgba(0, 0, 0, 0.2);
+  --shadow-card: rgba(0, 0, 0, 0.12);
+  --highlight: #007bff;
+  --price-color: #008000;
+}
+
+[data-theme="dark"] {
+  --bg-main: #121212;
+  --bg-card: #1e1e2f;
+  --text-main: #f0f0f0;
+  --text-muted: #999999;
+  --border-color: #444;
+  --shadow-inset: rgba(255, 255, 255, 0.05);
+  --shadow-hover: rgba(255, 255, 255, 0.1);
+  --shadow-card: rgba(0, 0, 0, 0.3);
+  --highlight: #3399ff;
+  --price-color: #4caf50;
+}
+
+/* عام */
 .App {
-    font-family: 'Arial', sans-serif;
-    padding: 20px;
-    background-color: #f7f7f7;
-    min-height: 100vh;
-  }
-  
-  .navbar {
-    background-color: #333;
-    padding: 10px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-  }
-  
-  .navbar a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-  }
-  
-  .navbar a:hover {
-    color: #ffd700;
-  }
-  
-  h1 {
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .product-list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 20px;
-  }
-  
-  .product-item {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .product-item:hover {
-    transform: translateY(-5px);
-  }
-  
-  .product-item h3 {
-    margin-top: 0;
-    color: #222;
-  }
-  
-  .product-item p {
-    margin: 5px 0;
-    color: #555;
-  }
-  
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  background-color: var(--bg-main);
+  min-height: 100vh;
+  color: var(--text-main);
+}
+
+/* عناوين */
+h1 {
+  margin-bottom: 25px;
+  font-weight: bold;
+}
+
+/* حاوية الفلاتر */
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+/* مدخلات ونماذج الفلاتر */
+.filter-select,
+.filter-input {
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-color);
+  box-shadow: inset 0 1px 3px var(--shadow-inset);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.filter-input {
+  flex-grow: 1;
+  min-width: 180px;
+}
+
+.price-input {
+  max-width: 120px;
+}
+
+.search-input {
+  flex-grow: 2;
+  min-width: 255px;
+}
+
+.filter-select:hover,
+.filter-input:hover {
+  border-color: var(--text-muted);
+}
+
+.filter-select:focus,
+.filter-input:focus {
+  border-color: var(--highlight);
+  box-shadow: 0 0 8px var(--highlight);
+}
+
+/* حالة التحميل وعدم وجود نتائج */
+.loading-text,
+.no-results-text {
+  font-size: 18px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* قائمة المنتجات */
+.product-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* عنصر منتج */
+.product-item {
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow-card);
+  padding: 18px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-item:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 8px 20px var(--shadow-hover);
+}
+
+/* صورة المنتج */
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  background-color: #fff;
+}
+
+/* معلومات المنتج */
+.product-info {
+  width: 100%;
+  text-align: center;
+}
+
+.product-info h3 {
+  margin: 0 0 8px 0;
+  color: var(--text-main);
+  font-size: 20px;
+}
+
+.price {
+  color: var(--price-color);
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.seller {
+  color: var(--text-muted);
+  font-size: 18px;
+  font-style: italic;
+}

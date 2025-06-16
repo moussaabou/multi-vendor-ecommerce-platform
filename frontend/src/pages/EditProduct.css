@@ -1,49 +1,86 @@
-/* تنسيق صفحة التعديل بالكامل */
+:root {
+  --bg-main: #ffffff;
+  --card-bg: #f9f9f9;
+  --text-color: #333;
+  --input-border: #ccc;
+  --btn-bg: #4CAF50;
+  --btn-hover: #45a049;
+  --slider-dot-color: #007bff;
+}
+
+[data-theme="dark"] {
+  --bg-main: #121212;
+  --card-bg: #1f1f2e;
+  --text-color: #e0e0e0;
+  --input-border: #555;
+  --btn-bg: #6fcf97;
+  --btn-hover: #4caf50;
+  --slider-dot-color: #00ccff;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-color);
+}
+
 .edit-product {
-  max-width: 600px;
+  max-width: 650px;
   margin: 30px auto;
-  background: #fff;
+  background: var(--card-bg);
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   direction: rtl;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 25px;
+  color: var(--text-color);
 }
 
 .form-group {
   margin-bottom: 20px;
 }
 
-input, textarea {
+input,
+textarea,
+select {
   width: 100%;
   padding: 10px;
   margin-top: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--input-border);
   border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--text-color);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 button.save-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
+  background-color: var(--btn-bg);
   color: white;
-  font-size: 18px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
+  font-size: 18px;
   cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button.save-button:hover {
-  background-color: #0056b3;
+  background-color: var(--btn-hover);
+  transform: scale(1.05);
 }
 
-/* تنسيق السلايدر */
-.slider-container {
-  margin: 20px 0;
+/* Slider Styling */
+.preview-slider {
+  margin-top: 30px;
 }
 
 .slider-image {
@@ -53,27 +90,6 @@ button.save-button:hover {
   border-radius: 12px;
 }
 
-/* تخصيص النقاط */
 .slick-dots li button:before {
-  color: #007bff;
+  color: var(--slider-dot-color) !important;
 }
-
-.save-button {
-  background-color: #4CAF50; /* لون أخضر جميل */
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  width: 100%;
-  font-weight: bold;
-  margin-top: 5%;
-}
-
-.save-button:hover {
-  background-color: #45a049;
-  transform: scale(1.05);
-}
-

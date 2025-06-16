@@ -47,17 +47,17 @@ function AllSellersPage() {
           type="text"
           value={search}
           onChange={handleSearch}
-          placeholder="🔍 ابحث بالاسم أو البريد..."
+          placeholder="🔍 بحث عن اسم أو بريد البائع..."
           className="search-input"
         />
 
         {loading ? (
-          <p>⏳ جاري التحميل...</p>
+          <p className="loading-msg">⏳ جاري التحميل...</p>
         ) : (
           <div className="sellers-list">
-            <p>إجمالي البائعين: {filteredSellers.length}</p>
+            <p className="summary">إجمالي البائعين: {filteredSellers.length}</p>
             {filteredSellers.length === 0 ? (
-              <p>❌ لا يوجد نتائج مطابقة.</p>
+              <p className="no-results">❌ لا يوجد نتائج مطابقة.</p>
             ) : (
               <ul>
                 {filteredSellers.map((seller) => (
@@ -67,7 +67,6 @@ function AllSellersPage() {
                     <p>📞 {seller.phone_number}</p>
                     <p>🏠 {seller.address}</p>
                     <p>🎂 {seller.birth_date}</p>
-
                     <button onClick={() => viewProducts(seller.id)} className="view-btn">
                       👀 عرض المنتجات
                     </button>

@@ -1,76 +1,256 @@
-/* src/components/Navbar.css */
+:root {
+  --primary-color: #6A0DAD;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --highlight: #ffd700;
+  --bg-color: #206db1; /* لون خلفية نهار أزرق فاتح */
+  --text-color: var(--text-light);
+  --link-hover-bg: rgba(255, 255, 255, 0.15);
+  --logout-bg: #e74c3c;
+  --logout-hover-bg: #c0392b;
+  --avatar-border: #ffffff;
+  --menu-bg-mobile: #464649; /* خلفية القائمة المنسدلة للجوال */
+}
+
+[data-theme="dark"] {
+  --bg-color: #1d213b;
+  --text-color: #e9eaec;
+  --link-hover-bg: rgba(255, 255, 255, 0.08);
+  --logout-bg: #dbb501;
+  --logout-hover-bg: #c2a200;
+  --avatar-border: #90adc6;
+  --menu-bg-mobile: #0e111d;
+}
 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4B0082; /* بنفسجي غامق */
-  padding: 14px 32px;
+  background-color: var(--bg-color);
+  padding: 12px 40px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   direction: rtl;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000; /* تأكد أن الـ Navbar يظهر فوق كل شيء */
+  flex-wrap: nowrap;
 }
 
-.nav-logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #ffffff;
-  text-decoration: none;
-  transition: transform 0.3s ease;
+.logo-image {
+  height: 70px;
+  width: auto;
+  max-width: 150px;
+  cursor: pointer;
 }
 
-.nav-logo:hover {
-  transform: scale(1.05);
-}
-
+.navbar-left,
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
+  flex-wrap: nowrap;
 }
 
 .nav-link {
-  color: #ffffff;
+  color: var(--text-color);
   text-decoration: none;
-  font-size: 1rem;
-  padding: 8px 14px;
-  border-radius: 8px;
+  font-size: 1.1rem;
+  padding: 10px 18px;
+  border-radius: 10px;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  white-space: nowrap; /* يمنع التفاف النص */
 }
 
 .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
+  background-color: var(--link-hover-bg);
+  transform: scale(1.07);
 }
 
 .logout-btn {
-  background-color: #e74c3c;
+  background-color: var(--logout-bg);
   color: #ffffff;
   border: none;
-  padding: 8px 14px;
-  font-size: 1rem;
+  padding: 10px 18px;
+  font-size: 1.1rem;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
 }
 
 .logout-btn:hover {
-  background-color: #c0392b;
-  transform: scale(1.05);
+  background-color: var(--logout-hover-bg);
+  transform: scale(1.07);
 }
 
 .seller-avatar {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ffffff;
-  margin-left: 8px;
+  border: 2.5px solid var(--avatar-border);
   transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
 .seller-avatar:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
+}
+
+.theme-toggle {
+  background: linear-gradient(to right, #90adc6, #1d213b);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background-color: var(--link-hover-bg);
+  transform: scale(1.07);
+}
+
+/* -------------------- Hamburger Menu Styles -------------------- */
+
+.hamburger-menu {
+  display: none; /* مخفي افتراضيًا */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001; /* تأكد أنه يظهر فوق القائمة */
+}
+
+.hamburger-icon {
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-color);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu.open .hamburger-icon:nth-child(1) {
+  transform: translateY(11px) rotate(45deg);
+}
+
+.hamburger-menu.open .hamburger-icon:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.open .hamburger-icon:nth-child(3) {
+  transform: translateY(-11px) rotate(-45deg);
+}
+
+/* -------------------- Responsive Design -------------------- */
+
+@media (max-width: 1024px) { /* تعديل نقطة التوقف للشاشات المتوسطة */
+  .navbar {
+    padding: 10px 30px;
+    gap: 15px;
+  }
+  .nav-link,
+  .logout-btn,
+  .theme-toggle {
+    font-size: 1rem;
+    padding: 9px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: nowrap; /* منع التفاف العناصر في الـ navbar الرئيسي */
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+
+  .navbar-left {
+    gap: 10px;
+  }
+
+  /* إخفاء الروابط الرئيسية على الشاشات الصغيرة */
+  .hide-on-mobile {
+    display: none;
+  }
+
+  /* إظهار الروابط في القائمة المنسدلة فقط */
+  .show-on-mobile {
+    display: block; /* سيتم تغيير عرضه داخل .navbar-right.open */
+  }
+
+  .hamburger-menu {
+    display: flex; /* إظهار زر الهامبرغر */
+  }
+
+  .navbar-right {
+    position: fixed;
+    top: 0;
+    right: -100%; /* إخفاء القائمة خارج الشاشة */
+    height: 100%;
+    width: 250px; /* عرض القائمة المنسدلة */
+    background-color: var(--menu-bg-mobile);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 80px 20px 20px; /* مسافة للابتعاد عن الأعلى بعد الهيدر */
+    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease-in-out;
+    z-index: 999; /* أقل من الهامبرغر ولكن أعلى من المحتوى */
+  }
+
+  .navbar-right.open {
+    right: 0; /* إظهار القائمة */
+  }
+
+  .navbar-right .nav-link,
+  .navbar-right .logout-btn,
+  .navbar-right .theme-toggle {
+    width: 100%; /* جعل الروابط تأخذ عرض القائمة بالكامل */
+    text-align: right; /* محاذاة النص لليمين */
+    margin-bottom: 15px; /* تباعد بين العناصر */
+    font-size: 1.1rem;
+    padding: 12px 20px;
+  }
+
+  .navbar-right .seller-avatar {
+    margin-bottom: 15px; /* تباعد تحت الصورة */
+  }
+
+  .logo-image {
+    height: 55px;
+    max-width: 130px;
+  }
+
+  .seller-avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) { /* للشاشات الصغيرة جدًا مثل الهواتف القديمة */
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .logo-image {
+    height: 45px;
+    max-width: 100px;
+  }
+
+  .navbar-right {
+    width: 80%; /* زيادة عرض القائمة المنسدلة قليلاً */
+  }
+
+  .navbar-right .nav-link,
+  .navbar-right .logout-btn,
+  .navbar-right .theme-toggle {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
 }

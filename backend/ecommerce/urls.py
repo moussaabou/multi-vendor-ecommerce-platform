@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     delete_product,
     delete_product_image,
+    filtered_products,
     get_product_detail,
     get_seller_products,
     product_list,
@@ -28,6 +29,8 @@ path('api/add-product/', add_product, name='add-product'),
 path('api/update-product/<int:product_id>/', update_product, name='update_product'),
 path('api/delete-product/<int:product_id>/', delete_product, name='delete_product'),
 path('api/delete-product-image/<int:product_id>/<int:image_number>/', delete_product_image),
+path('api/filter-products/', filtered_products, name='filtered_products'),
+
 # ==== البائعين ====
 path('api/register-seller/', register_seller, name='register-seller'),
 path('api/seller-products/<int:seller_id>/', seller_products, name='seller-products'),

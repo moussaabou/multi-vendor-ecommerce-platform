@@ -5,25 +5,22 @@ import './ProductList.css';
 const ProductFilterPage = () => {
   const [category, setCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortPrice, setSortPrice] = useState('');
+  const [sortPrice, setSortPrice] = useState(''); // 'asc' أو 'desc' أو ''
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // جلب المنتجات مع الفلاتر
   useEffect(() => {
     setLoading(true);
     let url = '/api/filter-products/?';
 
     if (category) url += `category=${encodeURIComponent(category)}&`;
-    // ملاحظة: حسب ما تفضلت، هذه الفلاتر لن ترسل minPrice و maxPrice و sortPrice للسيرفر
-    // لو تريد ترسلها أزل التعليقات عن الأسطر التالية:
-    /*
     if (minPrice) url += `min_price=${minPrice}&`;
     if (maxPrice) url += `max_price=${maxPrice}&`;
     if (sortPrice) url += `sort_price=${sortPrice}&`;
-    */
 
     fetch(url)
       .then(res => {
@@ -39,23 +36,12 @@ const ProductFilterPage = () => {
         setProducts([]);
         setLoading(false);
       });
-  }, [category]); // نراقب فقط تغير النوع category لجلب جديد من السيرفر
+  }, [category, minPrice, maxPrice, sortPrice]);
 
-  // فلترة محلية حسب البحث و السعر بعد جلب المنتجات من السيرفر:
-  let filteredProducts = products
-    .filter(product => product.name.toLowerCase().includes(searchTerm.toLowerCase()))
-    .filter(product => {
-      if (minPrice && product.price < Number(minPrice)) return false;
-      if (maxPrice && product.price > Number(maxPrice)) return false;
-      return true;
-    });
-
-  // ترتيب حسب السعر
-  if (sortPrice === 'asc') {
-    filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
-  } else if (sortPrice === 'desc') {
-    filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
-  }
+  // فلترة إضافية حسب البحث بالاسم فقط (اختياري لو API فلتر جيد)
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleProductClick = (id) => {
     navigate(`/product/${id}`);
@@ -65,11 +51,12 @@ const ProductFilterPage = () => {
     <div className="App">
       <h1>تصفية المنتجات حسب النوع والسعر والبحث</h1>
 
-      <div className="filter-controls">
+      <div style={{ marginBottom: '15px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        {/* تصنيف النوع */}
         <select
           value={category}
           onChange={e => setCategory(e.target.value)}
-          className="filter-select"
+          style={{ padding: '8px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ccc' }}
         >
           <option value="">اختر نوع المنتج</option>
           <option value="هاتف">هاتف</option>
@@ -78,36 +65,40 @@ const ProductFilterPage = () => {
           <option value="حاسوب">حاسوب</option>
         </select>
 
+        {/* البحث */}
         <input
           type="search"
           placeholder="ابحث عن منتج..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="filter-input search-input"
+          style={{ padding: '8px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ccc', flex: '1' }}
         />
 
+        {/* أقل سعر */}
         <input
           type="number"
           placeholder="أقل سعر"
           value={minPrice}
           onChange={e => setMinPrice(e.target.value)}
-          className="filter-input price-input"
+          style={{ padding: '8px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ccc', width: '100px' }}
           min="0"
         />
 
+        {/* أعلى سعر */}
         <input
           type="number"
           placeholder="أعلى سعر"
           value={maxPrice}
           onChange={e => setMaxPrice(e.target.value)}
-          className="filter-input price-input"
+          style={{ padding: '8px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ccc', width: '100px' }}
           min="0"
         />
 
+        {/* ترتيب السعر */}
         <select
           value={sortPrice}
           onChange={e => setSortPrice(e.target.value)}
-          className="filter-select"
+          style={{ padding: '8px', fontSize: '16px', borderRadius: '5px', border: '1px solid #ccc' }}
         >
           <option value="">ترتيب السعر</option>
           <option value="asc">من الأقل إلى الأعلى</option>
@@ -116,9 +107,9 @@ const ProductFilterPage = () => {
       </div>
 
       {loading ? (
-        <p className="loading-text">جاري التحميل...</p>
+        <p>جاري التحميل...</p>
       ) : filteredProducts.length === 0 ? (
-        <p className="no-results-text">لا توجد منتجات مطابقة.</p>
+        <p>لا توجد منتجات مطابقة.</p>
       ) : (
         <ul className="product-list">
           {filteredProducts.map(product => (
@@ -126,18 +117,19 @@ const ProductFilterPage = () => {
               key={product.id}
               className="product-item"
               onClick={() => handleProductClick(product.id)}
-              title={`عرض تفاصيل ${product.name}`}
               style={{ cursor: 'pointer' }}
+              title={`عرض تفاصيل ${product.name}`}
             >
               <img
                 src={product.images?.[0]}
                 alt={product.name}
                 className="product-image"
+                style={{ width: '100%', borderRadius: '10px' }}
               />
               <div className="product-info">
                 <h3>{product.name}</h3>
-                <p className="price">{product.price} د.ج</p>
-                <p className="seller">البائع: {product.seller}</p>
+                <p>{product.price} د.ج</p>
+                <p style={{ color: '#777', fontSize: '14px' }}>البائع: {product.seller}</p>
               </div>
             </li>
           ))}

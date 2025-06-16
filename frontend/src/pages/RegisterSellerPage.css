@@ -1,23 +1,61 @@
+/* Global Variables */
 :root {
-  --bg-body: linear-gradient(to right, #ece9e6, #ffffff);
-  --bg-form: rgba(255, 255, 255, 0.9);
-  --text-color: #333;
-  --input-bg: #ffffff;
-  --input-border: #ccc;
-  --btn-bg: #4CAF50;
-  --btn-hover: #45a049;
-  --shadow-light: rgba(0, 0, 0, 0.1);
+  /* Light Mode Colors */
+  --primary-color: #dbb501;
+  --secondary-color: #c2a200;
+  --accent-color: #ffd700;
+  --background-color: #ffffff;
+  --text-color: #2d3436;
+  --light-text: #636e72;
+  --white: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(0, 0, 0, 0.05);
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-border: rgba(0, 0, 0, 0.1);
+  --hover-shadow: rgba(0, 0, 0, 0.2);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #dbb501 0%, #c2a200 100%);
+  --gradient-light: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.15);
+  --button-glow: 0 0 15px rgba(255, 215, 0, 0.3);
+  
+  /* Other */
+  --border-radius: 16px;
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --navbar-height: 70px;
 }
 
-[data-theme='dark'] {
-  --bg-body: linear-gradient(to right, #1a1a2e, #16213e);
-  --bg-form: rgba(30, 30, 47, 0.9);
-  --text-color: #f0f0f0;
-  --input-bg: #2c2c3e;
-  --input-border: #555;
-  --btn-bg: #388e3c;
-  --btn-hover: #2e7d32;
-  --shadow-light: rgba(0, 0, 0, 0.4);
+[data-theme="dark"] {
+  /* Dark Mode Colors */
+  --primary-color: #ffd700;
+  --secondary-color: #ffc107;
+  --accent-color: #ffeb3b;
+  --background-color: #1a1b26;
+  --text-color: #f8f9fa;
+  --light-text: rgba(255, 255, 255, 0.8);
+  --white: rgba(255, 255, 255, 0.08);
+  --card-bg: rgba(26, 27, 38, 0.95);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.1);
+  --hover-shadow: rgba(0, 0, 0, 0.5);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #ffd700 0%, #ffc107 100%);
+  --gradient-light: linear-gradient(135deg, #2a2b36 0%, #1a1b26 100%);
+  --gradient-card: linear-gradient(135deg, rgba(26, 27, 38, 0.95) 0%, rgba(26, 27, 38, 0.85) 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --button-glow: 0 0 20px rgba(255, 215, 0, 0.4);
 }
 
 /* خلفية الصفحة */
@@ -32,59 +70,262 @@ body {
 
 /* نموذج التسجيل */
 .register-container {
-  max-width: 420px;
-  margin: 60px auto;
-  padding: 26px 30px;
-  background-color: var(--bg-form);
-  border-radius: 16px;
-  box-shadow: 0 8px 20px var(--shadow-light);
-  direction: rtl;
-  color: var(--text-color);
-  backdrop-filter: blur(6px);
-  transition: background-color 0.5s ease, color 0.3s ease;
+  min-height: calc(100vh - var(--navbar-height));
+  padding: calc(var(--navbar-height) + 2rem) 2rem 2rem;
+  background: var(--gradient-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: var(--transition);
 }
 
 .register-container h2 {
   text-align: center;
-  margin-bottom: 22px;
   color: var(--text-color);
-  font-weight: bold;
+  margin-bottom: 2.5rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeInDown 0.8s ease-out;
+  text-shadow: 0 2px 4px var(--hover-shadow);
+  position: relative;
+}
+
+.register-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
 }
 
 .register-container form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  width: 100%;
+  max-width: 600px;
+  background: var(--gradient-card);
+  padding: 2.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.8s ease-out;
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(10px);
 }
 
 .register-container input {
-  padding: 11px;
-  border: 1px solid var(--input-border);
-  background-color: var(--input-bg);
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--input-border);
+  border-radius: var(--border-radius);
+  background: var(--input-bg);
   color: var(--text-color);
-  border-radius: 8px;
-  font-size: 15px;
-  transition: border-color 0.3s, background-color 0.3s;
+  font-size: 1.1rem;
+  transition: var(--transition);
 }
 
 .register-container input:focus {
   outline: none;
-  border-color: var(--btn-bg);
-  box-shadow: 0 0 8px var(--btn-bg);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(219, 181, 1, 0.15);
+  transform: translateY(-2px);
+  background: var(--card-bg);
+}
+
+.register-container input[type="file"] {
+  padding: 1rem;
+  background: var(--input-bg);
+  border: 2px dashed var(--input-border);
+  cursor: pointer;
+  text-align: center;
+  color: var(--light-text);
+}
+
+.register-container input[type="file"]:hover {
+  border-color: var(--primary-color);
+  background: var(--card-bg);
+}
+
+.register-container input[type="file"]::file-selector-button {
+  background: var(--gradient-primary);
+  color: var(--text-color);
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-right: 1rem;
+}
+
+.register-container input[type="file"]::file-selector-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
 }
 
 .register-container button {
-  padding: 12px;
-  background-color: var(--btn-bg);
-  color: #fff;
+  width: 100%;
+  padding: 1.2rem;
+  background: var(--gradient-primary);
+  color: var(--text-color);
   border: none;
-  font-size: 16px;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
+  font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: var(--transition);
+  margin-top: 1rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .register-container button:hover {
-  background-color: var(--btn-hover);
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  box-shadow: var(--button-glow);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .register-container {
+    padding: calc(var(--navbar-height) + 1rem) 1rem 1rem;
+  }
+
+  .register-container h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .register-container form {
+    padding: 2rem;
+  }
+
+  .register-container input {
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+  }
+
+  .register-container button {
+    padding: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container h2 {
+    font-size: 1.8rem;
+  }
+
+  .register-container form {
+    padding: 1.5rem;
+  }
+
+  .register-container input {
+    padding: 0.8rem 1rem;
+  }
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-icon {
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--light-text);
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.input-group input {
+  padding-right: 3.5rem;
+}
+
+.input-group input:focus + .input-icon {
+  color: var(--primary-color);
+}
+
+.file-input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.file-input-group .input-icon {
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--light-text);
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.file-input-group input[type="file"] {
+  padding-right: 3.5rem;
+}
+
+.file-input-group input[type="file"]:hover + .input-icon {
+  color: var(--primary-color);
+}
+
+.image-preview {
+  margin-top: 1rem;
+  width: 100%;
+  height: 200px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--input-border);
+  transition: var(--transition);
+}
+
+.image-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color);
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

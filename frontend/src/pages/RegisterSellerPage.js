@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCalendarAlt, FaLock, FaImage } from 'react-icons/fa';
 import './RegisterSellerPage.css';
 
 function RegisterSellerPage() {
@@ -12,13 +13,23 @@ function RegisterSellerPage() {
     address: '',
     birth_date: '',
     password: '',
-    profile_picture: null,  // إضافة حقل للصورة
+    profile_picture: null,
   });
+
+  const [previewImage, setPreviewImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === 'file') {
-      setForm({ ...form, profile_picture: files[0] }); // حفظ الصورة
+      const file = files[0];
+      setForm({ ...form, profile_picture: file });
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -28,14 +39,13 @@ function RegisterSellerPage() {
     e.preventDefault();
 
     const formData = new FormData();
-    // إضافة جميع الحقول إلى FormData
     for (const key in form) {
       formData.append(key, form[key]);
     }
 
     fetch('/api/register-seller/', {
       method: 'POST',
-      body: formData,  // إرسال FormData بدلاً من JSON
+      body: formData,
     })
       .then((res) => {
         if (!res.ok) throw new Error('فشل في التسجيل');
@@ -50,29 +60,51 @@ function RegisterSellerPage() {
       .catch((err) => alert('حدث خطأ: ' + err.message));
   };
 
+  const renderInput = (field, icon, type = 'text') => (
+    <div className="input-group">
+      <div className="input-icon">
+        {icon}
+      </div>
+      <input
+        type={type}
+        name={field}
+        placeholder={field.replace('_', ' ')}
+        value={form[field]}
+        onChange={handleChange}
+        required
+      />
+    </div>
+  );
+
   return (
     <div className="register-container">
       <h2>تسجيل بائع جديد</h2>
       <form onSubmit={handleSubmit}>
-        {['name', 'surname', 'phone_number', 'email', 'address', 'birth_date', 'password'].map((field) => (
-          <input
-            key={field}
-            type={field === 'birth_date' ? 'date' : field === 'email' ? 'email' : field === 'password' ? 'password' : 'text'}
-            name={field}
-            placeholder={field.replace('_', ' ')}
-            value={form[field]}
-            onChange={handleChange}
-            required
-          />
-        ))}
+        {renderInput('name', <FaUser />)}
+        {renderInput('surname', <FaUser />)}
+        {renderInput('phone_number', <FaPhone />)}
+        {renderInput('email', <FaEnvelope />, 'email')}
+        {renderInput('address', <FaMapMarkerAlt />)}
+        {renderInput('birth_date', <FaCalendarAlt />, 'date')}
+        {renderInput('password', <FaLock />, 'password')}
         
-        {/* حقل لتحميل الصورة */}
-        <input
-          type="file"
-          name="profile_picture"
-          onChange={handleChange}
-          accept="image/*"
-        />
+        <div className="file-input-group">
+          <div className="input-icon">
+            <FaImage />
+          </div>
+          <input
+            type="file"
+            name="profile_picture"
+            onChange={handleChange}
+            accept="image/*"
+            className={previewImage ? 'has-preview' : ''}
+          />
+          {previewImage && (
+            <div className="image-preview">
+              <img src={previewImage} alt="Preview" />
+            </div>
+          )}
+        </div>
         
         <button type="submit">تسجيل</button>
       </form>

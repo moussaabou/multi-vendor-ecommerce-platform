@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Slider from 'react-slick'; // اضافة السلايدر
+import Slider from 'react-slick';
+import { FaSave, FaSpinner, FaImage, FaTag, FaMoneyBillWave, FaAlignLeft } from 'react-icons/fa';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import './EditProduct.css'; // ملف التنسيق الخاص بك
+import './EditProduct.css';
 
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [product, setProduct] = useState({
     name: '',
@@ -23,20 +26,27 @@ const EditProduct = () => {
   const [previewImages, setPreviewImages] = useState([]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/product/${id}/`)
-      .then(res => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/product/${id}/`);
         setProduct({
-          name: res.data.name,
-          description: res.data.description,
-          category: res.data.category,
-          price: res.data.price,
+          name: response.data.name,
+          description: response.data.description,
+          category: response.data.category,
+          price: response.data.price,
           image1: null,
           image2: null,
           image3: null,
         });
-        setPreviewImages(res.data.images);
-      })
-      .catch(err => console.error(err));
+        setPreviewImages(response.data.images);
+      } catch (err) {
+        console.error('خطأ في جلب بيانات المنتج:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
   }, [id]);
 
   const handleChange = e => {
@@ -50,6 +60,8 @@ const EditProduct = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setSaving(true);
+    
     const formData = new FormData();
     formData.append('name', product.name);
     formData.append('description', product.description);
@@ -68,12 +80,13 @@ const EditProduct = () => {
       alert('✅ تم التحديث بنجاح');
       navigate('/seller');
     } catch (err) {
-      console.error(err);
+      console.error('خطأ في تحديث المنتج:', err);
       alert('❌ حدث خطأ أثناء التحديث');
+    } finally {
+      setSaving(false);
     }
   };
 
-  // إعدادات السلايدر
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -82,45 +95,113 @@ const EditProduct = () => {
     autoplaySpeed: 2000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    rtl: true, // لأنك بالعربي (يدعم الاتجاه من اليمين لليسار)
+    rtl: true,
   };
+
+  if (loading) {
+    return (
+      <div className="edit-product">
+        <div className="loading">
+          <FaSpinner className="spinner" />
+          جاري تحميل بيانات المنتج...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="edit-product">
       <h2>تعديل المنتج</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="form-group">
-          <input type="text" name="name" value={product.name} onChange={handleChange} placeholder="الاسم" required />
+          <label>
+            <FaTag style={{ marginLeft: '8px' }} />
+            اسم المنتج
+          </label>
+          <input
+            type="text"
+            name="name"
+            value={product.name}
+            onChange={handleChange}
+            placeholder="أدخل اسم المنتج"
+            required
+          />
         </div>
 
         <div className="form-group">
-          <textarea name="description" value={product.description} onChange={handleChange} placeholder="الوصف" required />
+          <label>
+            <FaAlignLeft style={{ marginLeft: '8px' }} />
+            وصف المنتج
+          </label>
+          <textarea
+            name="description"
+            value={product.description}
+            onChange={handleChange}
+            placeholder="أدخل وصف المنتج"
+            required
+          />
         </div>
 
         <div className="form-group">
-          <input type="text" name="category" value={product.category} onChange={handleChange} placeholder="الصنف" required />
+          <label>
+            <FaTag style={{ marginLeft: '8px' }} />
+            الصنف
+          </label>
+          <input
+            type="text"
+            name="category"
+            value={product.category}
+            onChange={handleChange}
+            placeholder="أدخل صنف المنتج"
+            required
+          />
         </div>
 
         <div className="form-group">
-          <input type="number" name="price" value={product.price} onChange={handleChange} placeholder="السعر" required />
+          <label>
+            <FaMoneyBillWave style={{ marginLeft: '8px' }} />
+            السعر
+          </label>
+          <input
+            type="number"
+            name="price"
+            value={product.price}
+            onChange={handleChange}
+            placeholder="أدخل سعر المنتج"
+            required
+          />
         </div>
 
         <div className="form-group">
-          <label>الصورة 1:</label>
-          <input type="file" name="image1" accept="image/*" onChange={handleChange} />
+          <label>
+            <FaImage style={{ marginLeft: '8px' }} />
+            الصور
+          </label>
+          <div className="file-inputs">
+            <input
+              type="file"
+              name="image1"
+              accept="image/*"
+              onChange={handleChange}
+              placeholder="الصورة 1"
+            />
+            <input
+              type="file"
+              name="image2"
+              accept="image/*"
+              onChange={handleChange}
+              placeholder="الصورة 2"
+            />
+            <input
+              type="file"
+              name="image3"
+              accept="image/*"
+              onChange={handleChange}
+              placeholder="الصورة 3"
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>الصورة 2:</label>
-          <input type="file" name="image2" accept="image/*" onChange={handleChange} />
-        </div>
-
-        <div className="form-group">
-          <label>الصورة 3:</label>
-          <input type="file" name="image3" accept="image/*" onChange={handleChange} />
-        </div>
-
-        {/* سلايدر الصور */}
         {previewImages.length > 0 && (
           <div className="preview-slider">
             <Slider {...sliderSettings}>
@@ -135,9 +216,19 @@ const EditProduct = () => {
           </div>
         )}
 
-        <div className="form-group">
-             <button type="submit" className="save-button">💾 حفظ التغييرات</button>
-        </div>
+        <button type="submit" className="save-button" disabled={saving}>
+          {saving ? (
+            <>
+              <FaSpinner className="spinner" />
+              جاري الحفظ...
+            </>
+          ) : (
+            <>
+              <FaSave style={{ marginLeft: '8px' }} />
+              حفظ التغييرات
+            </>
+          )}
+        </button>
       </form>
     </div>
   );

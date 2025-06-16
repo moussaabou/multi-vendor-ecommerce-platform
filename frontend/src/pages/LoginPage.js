@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -63,20 +64,32 @@ function LoginPage() {
     <div className="login-container">
       <h2>تسجيل الدخول</h2>
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="الإيميل"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="كلمة المرور"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className="input-group">
+          <input
+            type="email"
+            placeholder="الإيميل"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <div className="input-icon">
+            <FaEnvelope />
+          </div>
+        </div>
+        
+        <div className="input-group">
+          <input
+            type="password"
+            placeholder="كلمة المرور"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div className="input-icon">
+            <FaLock />
+          </div>
+        </div>
+
         <button type="submit" disabled={loading}>
           {loading ? 'جاري تسجيل الدخول...' : 'دخول'}
         </button>

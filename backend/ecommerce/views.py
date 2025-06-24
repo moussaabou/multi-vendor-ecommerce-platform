@@ -143,12 +143,18 @@ def login_view(request):
     if not user:
         return JsonResponse({'error': 'بيانات الدخول غير صحيحة'}, status=400)
 
+    # إنشاء JWT
+    refresh = RefreshToken.for_user(user)
+
     response_data = {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
         'role': role,
         'id': user.id
     }
 
     if role == 'seller':
+        # إرجاع كل بيانات البائع
         response_data.update({
             'name': user.name,
             'surname': user.surname,

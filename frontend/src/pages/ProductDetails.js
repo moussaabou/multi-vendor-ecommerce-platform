@@ -129,7 +129,7 @@ function ProductDetails() {
             </span>
           </p>
 
-          {userType === 'seller' && product.seller_id === parseInt(userId) && (
+          {(userType === 'admin' || (userType === 'seller' && product.seller_id === parseInt(userId))) && (
             <div className="actions">
               <button className="edit-btn" onClick={() => navigate(`/edit-product/${product.id}`)}>
                 <FaEdit /> تعديل

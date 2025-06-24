@@ -14,3 +14,8 @@ npm start
 
 
 KGqA9r8Gql
+-----------------------------
+git add .
+git commit -m "commit - UsedShop full project" 
+git push -u origin main
+ 
